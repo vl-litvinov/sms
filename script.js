@@ -2,6 +2,9 @@ const input = document.querySelector('.input');
 const button = document.querySelector('.button');
 const smsText = document.querySelector('.sms-text');
 
+const MAX_LENGTH = 140;
+const MAX_SMS_COUNT = 9999;
+
 const textToSMS = (text) => {
   const splittedText = text.split(' ');
   let resultSMS = [];
@@ -10,7 +13,7 @@ const textToSMS = (text) => {
   for (let i = 0; i < splittedText.length; i++) {
     message += splittedText[i];
     message += ' ';
-    if (splittedText[i + 1] !== undefined && (message + splittedText[i + 1]).length > 140) {
+    if (splittedText[i + 1] !== undefined && (message + splittedText[i + 1]).length > MAX_LENGTH) {
       testSMS.push(message.trim());
       message = '';
     }
@@ -21,16 +24,16 @@ const textToSMS = (text) => {
   };
   for (let i = 0; i < splittedText.length; i++) {
     message += splittedText[i];
-    if (message.length > 140) {
+    if (message.length > MAX_LENGTH) {
       smsText.innerText = 'Incorrect message';
       return;
     }
-    if (splittedText[i + 1] !== undefined && message.length > 136) {
+    if (splittedText[i + 1] !== undefined && message.length > MAX_LENGTH - ` ${resultSMS.length}/${testSMS.length}`.length) {
       smsText.innerText = 'Incorrect message';
       return;
     }
     message += ' ';
-    if (splittedText[i + 1] !== undefined && (message + splittedText[i + 1]).length > (140 - ` ${resultSMS.length}/${testSMS.length}`.length)) {
+    if (splittedText[i + 1] !== undefined && (message + splittedText[i + 1]).length > (MAX_LENGTH - ` ${resultSMS.length}/${testSMS.length}`.length)) {
       resultSMS.push(message.trim());
       message = '';
     }
@@ -48,7 +51,7 @@ const handleButtonClick = () => {
     return;
   }
   const sms = textToSMS(input.value?.trim());
-  if (sms.length > 9999) {
+  if (sms.length > MAX_SMS_COUNT) {
     smsText.innerText = 'Message too big';
     return;
   }

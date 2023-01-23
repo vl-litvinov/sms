@@ -13,8 +13,9 @@ const textToSMS = (text) => {
   for (let i = 0; i < splittedText.length; i++) {
     message += splittedText[i];
     message += ' ';
-    if (splittedText[i + 1] !== undefined && (message + splittedText[i + 1]).length > MAX_LENGTH) {
-      testSMS.push(message.trim());
+    if (splittedText[i + 1] !== undefined && (message + splittedText[i + 1]).length > MAX_LENGTH - ` ${testSMS.length}/${testSMS.length}`.length) {
+      message += `${testSMS.length}/${testSMS.length}`;
+      testSMS.push(message);
       message = '';
     }
     if (i === splittedText.length - 1 && message !== '') {
@@ -51,6 +52,9 @@ const handleButtonClick = () => {
     return;
   }
   const sms = textToSMS(input.value?.trim());
+  sms.forEach((item) => {
+    if(item.length > 140) console.log(item);
+  });
   if (sms.length > MAX_SMS_COUNT) {
     smsText.innerText = 'Message too big';
     return;
